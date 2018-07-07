@@ -45,6 +45,9 @@ let ajax_1 = function () {
     })
     .then((res)=>{
       resolve(res);
+    })      
+    .catch((res)=>{
+      reject("获取ajax_1数据失败了")
     })
   })
  };
@@ -64,6 +67,9 @@ let ajax_1 = function () {
       .then((res)=>{
         //console.log(res) // 获取JSON数据
         resolve(res);
+      })      
+      .catch((res)=>{
+        reject("获取ajax_2数据失败了")
       })
   })
  };

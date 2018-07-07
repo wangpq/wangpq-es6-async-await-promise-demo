@@ -19,7 +19,6 @@ fetch('https://cnodejs.org/api/v1/topics', { // 在URL中写上传递的参数
 */
 
 
-
 // 通过fetch获取页面内容
 fetch("../html/temp/demo.html", {
   method: 'GET'

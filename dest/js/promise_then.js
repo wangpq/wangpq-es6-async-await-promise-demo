@@ -1,3 +1,5 @@
+(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 'use strict'; /*
               let ajax_1 = function () {
                 //返回一个Promise对象
@@ -45,6 +47,9 @@ var ajax_1 = function ajax_1() {
     }).
     then(function (res) {
       resolve(res);
+    }).
+    catch(function (res) {
+      reject("获取ajax_1数据失败了");
     });
   });
 };
@@ -64,6 +69,9 @@ var ajax_2 = function ajax_2() {
     then(function (res) {
       //console.log(res) // 获取JSON数据
       resolve(res);
+    }).
+    catch(function (res) {
+      reject("获取ajax_2数据失败了");
     });
   });
 };
@@ -79,3 +87,6 @@ ajax_1().then(function (data_1) {
 }).then(function (data_2) {
   console.log(data_2);
 });
+},{}]},{},[1]);
+
+},{}]},{},[1]);
