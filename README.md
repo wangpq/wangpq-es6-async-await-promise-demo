@@ -1,4 +1,4 @@
-# wangpq-inherit-demo
+# wangpq-es6-async-await-promise-demo
 > 使用gulp简单搭建了一个支持es6的环境，弄了些es6中async/await、Promise的具体实例
 
 
