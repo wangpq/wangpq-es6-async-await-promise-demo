@@ -12,10 +12,9 @@
   },
   "keywords": [
     "es6",
-    "demo",
     "gulp",
-    "es6",
-    "demo"
+    "async",
+    "promise"
   ],
   "author": "wangpq",
   "license": "ISC",
