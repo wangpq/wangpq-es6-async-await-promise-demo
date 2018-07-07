@@ -1,5 +1,5 @@
 # wangpq-es6-async-await-promise-demo
-> 使用gulp简单搭建了一个支持es6的环境，弄了些es6中async/await、Promise的具体实例
+> 使用gulp简单搭建了一个支持es6的环境，弄了些es6中async/await、Promise的具体实例，给初学者一个参考
 
 
 #怎样运行示例?
