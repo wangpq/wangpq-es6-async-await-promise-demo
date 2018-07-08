@@ -1,5 +1,4 @@
 ﻿// 获取接口数据
-/*
 fetch('https://cnodejs.org/api/v1/topics', { // 在URL中写上传递的参数
   method: 'GET',
   headers: new Headers({
@@ -16,18 +15,4 @@ fetch('https://cnodejs.org/api/v1/topics', { // 在URL中写上传递的参数
 .catch((res)=>{
   console.log("获取ajax数据失败了")
 })
-*/
-
-
-// 通过fetch获取页面内容
-fetch("../html/temp/demo.html", {
-  method: 'GET'
-})
-.then((res)=>{
-  return res.text()
-})
-.then((res)=>{
-  console.log(res)
-})
-
 

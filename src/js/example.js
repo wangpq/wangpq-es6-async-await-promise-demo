@@ -1,64 +1,14 @@
-﻿/*
-function sleep(time, param) {
-  return new Promise((resolve, reject) => {
-      setTimeout(() => {
-          resolve(param);
-          reject('want to sleep~'+param);
-      }, time);
-  })
-}
-
-async function test() {
-  let result1 = await sleep(2000, '_req01_');
-  let result2 = await sleep(1000, '_req02_' + result1);
-  let result3 = await sleep(500, '_req03_' + result2);
-  let totalRes=`
-    ${result3}
-    ${result2}
-    ${result1}
-  `
-  console.log(totalRes);
-}
-
-test();
-*/
-
-
-
-
-/*
-let ajax_1 = function () {
-  //返回一个Promise对象
-  return new Promise(function (resolve, reject) {
-    fetch('https://cnodejs.org/api/v1/user/alsotang', { 
-      method: 'GET',
-      headers: new Headers({
-        'Accept': 'application/json' 
-      })
-    })
-    .then((res)=>{
-      return res.json() 
-    })
-    .then((res)=>{
-      console.log("获取ajax_1数据成功了")
-      resolve(res)
-    })
-    .catch((res)=>{
-      reject("获取ajax_1数据失败了");
-    })
-  })
-};
-*/
-
-import jQuery from "./jquery"
+﻿
+import {Animal,GztUtils,Circle} from "./utils"
+import $ from "./jquery"
 
 let ajax_1 = function () {
   //返回一个Promise对象
   return new Promise(function (resolve, reject) {
-    jQuery.ajax({
+    $.ajax({
       url : 'https://cnodejs.org/api/v1/user/alsotang',
       type : "get",
-      success : function(res){  
+      success : function(res){ 
         console.log("获取ajax_1数据成功了")
         resolve(res)
       },
@@ -101,5 +51,34 @@ async function twoAjax() {
 console.log("---async_await demo---");
 twoAjax();
 
+
+class Dog extends Animal{
+  constructor(name,color){
+    console.log("==constructor dog");
+    super();
+    this.name = name;
+    this.color = color;
+　  this.variety = "犬科";
+  }
+  sayHello (){
+    return "我是"+this.name+",肤色为"+this.color+","+　this.variety+"动物";
+  }
+}
+
+document.getElementById("demo").innerHTML=new Dog("大宝","黄色").say() +"---"+new Dog("大宝","黄色").sayHello();
+
+document.getElementById("btnAdd").onclick=function(){
+  let v1=document.getElementById("addOne").value;
+  let v2=document.getElementById("addTwo").value;
+  if(!isNaN(v1) && !isNaN(v2)){
+    $("#demo_2").html(GztUtils.add(parseInt(v1),parseInt(v2)));
+  }else{
+    $("#demo_2").html("输入数据格式有误");
+  }
+}
+
+document.getElementById("circle").onkeyup=function(){ 
+   document.getElementById("demo_3").innerHTML=(new Circle(parseInt(this.value)).getArea()).toFixed(2) ;
+}
 
 
