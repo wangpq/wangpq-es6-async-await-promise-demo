@@ -20,43 +20,49 @@ const rimraf = require('gulp-rimraf');
 let config = {
   // 本地web服务器
   "connect" : {
-      "root" : ['./dest/'],
+      "root" : ['./temp/'],
       "port" : 8080,
       "livereload" : true
   },
   "css" :{
       "path" : {
           "src" : "src/css/",
+          "temp" : "temp/css/",
           "dest" : "dest/css/"
       }
   },
   "less" : {
       "path" : {
           "src" : "src/less/",
-          "dest" : "src/css/"
+          "temp" : "temp/less/",
+          "dest" : "dest/css/"
       }
   },
   "sass" : {
       "path" : {
           "src" : "src/sass/",
-          "dest" : "src/css/"
+          "temp" : "temp/sass/",
+          "dest" : "dest/css/"
       }
   },
   "html" : {
       "path" : {
           "src" : "src/html/",
+          "temp" : "temp/html/",
           "dest" : "dest/html/"
       }
   },
   "img" :  {
       "path" : {
           "src" : "src/images/",
+          "temp" : "temp/images/",
           "dest" : "dest/images/"
       }
   },
   "js" : {
       "path" : {
           "src" : "src/js/",
+          "temp" : "temp/js/",
           "dest" : "dest/js/"
       }
   }
@@ -77,7 +83,7 @@ let helper={
       }
   },
   addPathToNode : function(path,node){
-    return path+nodes;
+    return path+node;
   },
   // 将元素或者数组中的元素作为函数参数并执行函数
   doNodesFn : function(nodes,fullPath,fn){
@@ -102,15 +108,27 @@ let tasks={
             fullPath : false,
 			group : [
 				{
-					value : ['base.css','app.css'],
-					name : "style"
-				}
+					value : ['base.css','example.css'],
+					name : "example"
+                },
+				{
+					value : ['base.css','async_await.css'],
+					name : "async_await"
+                },
+				{
+					value : ['base.css','promise_all.css'],
+					name : "promise_all"
+				}  
 			]
         }
         ,
 		js : {
             fullPath : false,
 			group : [
+				{
+					value : ['utils.js','jquery.js','example.js'],
+					name : "example"
+                },
 				{
 					value : ['fetch.js'],
 					name : "fetch"
@@ -140,13 +158,16 @@ let tasks={
 	 *注意key和HTML中书写的名称对应,value和合并cat.group.name对应
 	 */
     replace : {
-        style: '../css/style.min.css',
-        flexibleJs: '../js/flexible.min.js'
-    },
-    // 入口js文件名
-    appJsName : {
-        oldName : "app",
-        newName : "bundle"
+        exampleCss: '../css/example.min.css',
+        promise_allCss: '../css/promise_all.min.css',
+        async_awaitCss: '../css/async_await.min.css',
+        exampleJs: '../js/example.min.js',
+        promise_allJs: '../js/promise_all.min.js',
+        async_awaitJs: '../js/async_await.min.js',
+
+        fetchJs: '../js/fetch.min.js',
+        promise_raceJs: '../js/promise_race.min.js',
+        promise_thenJs: '../js/promise_then.min.js'
     }
 }
 
@@ -168,26 +189,6 @@ gulp.task('images', function(){
         .pipe(connect.reload());
 });
 
-// 监听ES6改动并编译到目标文件夹，然后合并转换为可执行的文件
-gulp.task('javascript', function(){
-  gulp.src(config.js.path.src+'**/*.js')
-  .pipe(babel({
-    presets: ['es2015']
-  }))
-  //.pipe(uglify()) 加了压缩无法debugger调试
-  .pipe(gulp.dest(config.js.path.dest))
-
-  browserify({
-      entries: config.js.path.dest + tasks.appJsName.oldName+".js"
-  })
-  .bundle()
-  .pipe(source( tasks.appJsName.newName+".js" ))
-  .pipe(gulp.dest(config.js.path.dest));
-
-  gulp.src(config.html.path.dest+'**/*.html')
-  .pipe(connect.reload());
-})
-
 // 合并并压缩css
 // concatMinCss方法中(没有采用**/*.css这种获取css文件的方式，因为样式需要按顺序合并打包，不然页面显示可能出错)
 gulp.task('style', function(){
@@ -200,90 +201,123 @@ gulp.task('style', function(){
     }))
     .pipe(gulp.dest(config.css.path.dest));
     */
-
     gulp.src(config.css.path.src+'**/*.css')
     .pipe(gulpAutoPrefixer({
         browsers: ['last 2 versions'],
         cascade: false
     }))
-    .pipe(gulp.dest(config.css.path.dest));
+    .pipe(gulp.dest(config.css.path.temp));
 
-    gulp.src(config.html.path.dest+'**/*.html')
+    gulp.src(config.html.path.temp+'**/*.html')
         .pipe(connect.reload());   
 })
 
 // html改变,自动重启本地web服务器
 gulp.task('html', function() {
   gulp.src(config.html.path.src+'**/*.html')
-  .pipe(gulp.dest(config.html.path.dest))
+  .pipe(gulp.dest(config.html.path.temp))
 
-  gulp.src(config.html.path.dest+'**/*.html')
+  gulp.src(config.html.path.temp+'**/*.html')
   .pipe(connect.reload());
 });
+
+
+// JS合并为指定文件名压缩到目标文件夹
+gulp.task('script', function() {
+
+    var fn=function(node,fullPath){
+        var srcValue=fullPath ? node.value : helper.addPathToNodes(config.js.path.src,node.value);
+        
+        gulp.src(srcValue)
+            .pipe(babel({
+                presets: ['es2015']
+            }))
+            /*
+            .pipe(uglify({
+                mangle: false,//类型：Boolean 默认：true 是否修改变量名
+                compress: false,//类型：Boolean 默认：true 是否完全压缩
+                preserveComments: 'all' //保留所有注释
+            }))
+            */
+            .pipe(gulp.dest(config.js.path.temp))
+
+        console.log("---script---uglify--ok-111-")
+
+        browserify({
+            entries: config.js.path.temp + node.name+".js"
+        })
+        .bundle()
+        .pipe(source( node.name+".js" ))
+        .pipe(gulp.dest(config.js.path.temp));
+    }
+    helper.doNodesFn(tasks.cat.js.group,tasks.cat.js.fullPath,fn);
+
+    gulp.src(config.js.path.temp+'**/*.js')
+        .pipe(connect.reload());
+
+    gulp.src(config.html.path.temp+'**/*.html')
+        .pipe(connect.reload());
+});
+
 
 /***********************************************/
 // 拷贝图片到目的文件夹中
 gulp.task('copyImages', function(){
     gulp.src(config.img.path.src+'**/*.{jpg,png,gif,ico}')
-        .pipe(gulp.dest(config.img.path.dest))
+        .pipe(gulp.dest(config.img.path.temp))
 });
 
 // CSS自动补全前缀并合并为指定文件名压缩到目标文件夹
 gulp.task('concatMinCss', function() {
     var fn=function(node,fullPath){
        //先删除dest中的css，有时候会不更新
-        gulp.src(config.css.path.dest+node.name+'.min.css')
-            .pipe(rimraf({force: true}));
+        try {
+            gulp.src(config.css.path.dest+node.name+'.min.css').pipe(rimraf({force: true}));
+        } catch (error) {
+        }
+
         var srcValue=fullPath ? node.value : helper.addPathToNodes(config.css.path.src,node.value);
         gulp.src(srcValue)
-            .pipe(gulpAutoPrefixer({
-                browsers: ['last 2 versions'],
-                cascade: false
-            }))
-            .pipe(concat(node.name+'.css'))
-            .pipe(rename({suffix: '.min'}))
-            .pipe(cleanCss({compatibility: 'ie8'}))
-            .pipe(gulp.dest(config.css.path.dest))
+        .pipe(gulpAutoPrefixer({
+            browsers: ['last 2 versions'],
+            cascade: false
+        }))
+        .pipe(concat(node.name+'.css'))
+        .pipe(rename({suffix: '.min'}))
+        .pipe(cleanCss({compatibility: 'ie8'}))
+        .pipe(gulp.dest(config.css.path.dest))
     }
     helper.doNodesFn(tasks.cat.css.group,tasks.cat.css.fullPath,fn);
 });
 
-
-// JS合并为指定文件名压缩到目标文件夹
+// 将调试成功并babel处理以后的js文件合并压缩到目标文件夹
 gulp.task('concatMinJs', function() {
-
+    try {
+        gulp.src(config.js.path.dest+'**/*.min.js')
+        .pipe(rimraf({force: true}));   
+    } catch (error) { 
+    }
     var fn=function(node,fullPath){
-        var srcValue=fullPath ? node.value : helper.addPathToNodes(config.js.path.src,node.value);
-        gulp.src(srcValue)
-            .pipe(babel({
-                presets: ['es2015']
-            }))
+        var tempValue=fullPath ? node.name+".js" : config.js.path.temp+node.name+".js";
+
+        gulp.src(tempValue)
             //.pipe(concat(node.name+'.js'))
-            //.pipe(rename({suffix: '.min'}))
+            .pipe(rename({suffix: '.min'}))
             //.pipe(uglify())
             .pipe(gulp.dest(config.js.path.dest))
-
-
-            browserify({
-                entries: config.js.path.dest + node.name+".js"
-            })
-            .bundle()
-            .pipe(source( node.name+".js" ))
-            .pipe(gulp.dest(config.js.path.dest));
     }
     helper.doNodesFn(tasks.cat.js.group,tasks.cat.js.fullPath,fn);
-
-    gulp.src(config.js.path.dest+'**/*.js')
-        .pipe(connect.reload());
-
-    gulp.src(config.html.path.dest+'**/*.html')
-        .pipe(connect.reload());
 });
+
+
 
 // 替换HTML文件中的CSS和JS并输出到指定位置
 gulp.task('gulpHtmlReplace', function() {
-    gulp.src(config.html.path.dest+'**/*.html')
-        .pipe(rimraf({force: true}));
+    try {
+        gulp.src(config.html.path.dest+'**/*.html')
+        .pipe(rimraf({force: true}));   
+    } catch (error) { 
+    }
     gulp.src(config.html.path.src+'**/*.html')
         .pipe(gulpHtmlReplace(tasks.replace))
         .pipe(gulp.dest(config.html.path.dest));
@@ -295,7 +329,7 @@ gulp.task('gulpHtmlReplace', function() {
 // 监视文件变化，自动执行任务
 gulp.task('watch', function(){
   gulp.watch(config.css.path.src+'**/*.css', ['style']);
-  gulp.watch(config.js.path.src+'**/*.js', ['concatMinJs']);
+  gulp.watch(config.js.path.src+'**/*.js', ['script']);
   gulp.watch(config.img.path.src+'**/*.{jpg,png,gif,ico}', ['images']);
   gulp.watch([config.html.path.src + '**/*.html'], ['html']);
 })

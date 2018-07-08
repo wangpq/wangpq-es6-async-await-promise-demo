@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Document</title>
+<!-- build:exampleCss -->
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/example.css">
+<!-- endbuild -->
+<style>
+    h2{margin-top:20px;}
+    .add-line input{width:4em;}
+</style>
+</head>
+<body>
+
+    <div id="demo"></div>
+
+    <h2>加法运算</h2>
+    <div class="add-line">
+        <input type="text" id="addOne">+
+        <input type="text" id="addTwo">=
+        <span id="demo_2"></span>
+        <button id="btnAdd">计算</button>
+    </div>
+
+    <h2>圆的面积计算</h2>
+    <div class="add-line">
+        半径为<input type="text" id="circle">的圆面积:<span id="demo_3"></span>  
+    </div>
+    
+<!-- build:exampleJs -->
+    <script src="../js/example.js"></script>
+<!-- endbuild -->
+</body>
+</html>
+
