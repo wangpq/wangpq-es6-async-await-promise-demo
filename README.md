@@ -82,13 +82,13 @@ Promise.all([p1, p2]).then((result) => {
 ```
 看完后可能一部分朋友懂该怎么做了，可还有部分朋友还在懵逼，不急，我们来先解释几个东东。
 
-* Promise对象有三种状态
+Promise对象有三种状态
 
 * pending：进行中
 
 * fulfilled :已经成功
 
-rejected 已经失败
+* rejected 已经失败
 
 Promise对象的状态改变，只有两种可能：
 
