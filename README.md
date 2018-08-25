@@ -6,7 +6,7 @@
 
 下载本项目到本地，cd进入此项目文件夹根目录，
 ```bash
-cd wangpq-inherit-demo
+cd wangpq-es6-async-await-promise-demo
 ```
 
 **然后下载依赖到本地**
