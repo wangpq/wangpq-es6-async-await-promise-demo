@@ -1,12 +1,12 @@
 # wangpq-es6-async-await-promise-demo
-> 使用gulp简单搭建了一个支持es6的环境，弄了些es6中async/await、Promise的具体实例，给初学者一个参考
+> 使用gulp简单搭建了一个支持es6的环境，弄了一些es6中async/await、Promise的具体实例，给初学者一个参考
 
 
 #怎样运行示例?
 
-下载本项目到本地，cd进入此项目文件夹根目录，
+下载本项目到本地，cd进入此项目文件夹根目录
 ```bash
-cd wangpq-inherit-demo
+cd wangpq-es6-async-await-promise-demo
 ```
 
 **然后下载依赖到本地**
@@ -23,7 +23,7 @@ gulp
 ***
 
 
-好多还没有使用过es6或者刚开始学习使用es6的前端开发者，可能都会遇到这样的问题，就是都听说了es6中可以使用fetch、promise、async、await来进行异步接口的数据处理，可实际该怎么写，却犯了难，不知从何着手，今天啊我我也自个使用gulp搭了个环境，做了几个这样的示例。
+一些还没有使用过es6或者刚开始学习使用es6的前端开发者，可能都会遇到这样的问题，就是都听说了es6中可以使用fetch、promise、async、await来进行异步接口的数据处理，可实际该怎么写，却犯了难，不知从何着手，今天啊我我也自个使用gulp搭了个环境，做了几个这样的示例。
 
 你见到的代码中src是源代码，dest是经过babel处理过未压缩可运行的代码。其他的我不多说了，我来讲讲怎么这几个属性的使用实例吧。
 
